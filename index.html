@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAKS & CO</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:9999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 55px;
+  background:rgba(0,0,0,0.22);
+  backdrop-filter:blur(18px);
+}
+
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:4px;
+}
+
+nav a{
+  margin-left:28px;
+  color:#d7d7d7;
+  text-decoration:none;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+nav a:hover{
+  color:#8b2038;
+}
+
+/* ─── HERO (centered text, no model) ─── */
+.hero{
+  height:100vh;
+  width:100%;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.hero-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.48),
+    rgba(0,0,0,0.92)
+  );
+}
+
+.hero-content{
+  position:relative;
+  z-index:5;
+  text-align:center;
+  max-width:820px;
+  padding:0 30px;
+}
+
+.subtitle,
+.section-tag{
+  font-size:12px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:#8b2038;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:92px;
+  line-height:0.92;
+  font-weight:600;
+  margin-bottom:26px;
+}
+
+.desc{
+  font-size:18px;
+  line-height:1.8;
+  color:#d0d0d0;
+  margin:0 auto;
+  max-width:620px;
+}
+
+button{
+  margin-top:34px;
+  padding:16px 42px;
+  border:0;
+  border-radius:50px;
+  background:#8b2038;
+  color:white;
+  font-size:14px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background 0.3s;
+}
+
+button:hover{
+  background:#a8273f;
+}
+
+/* ─── SECTION 2: Scroll image change, fixed text ─── */
+.articles-scroll{
+  height:300vh;
+  position:relative;
+  background:#050505;
+}
+
+.articles-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  width:100%;
+  overflow:hidden;
+}
+
+.article-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition:opacity 0.55s ease;
+  z-index:1;
+}
+
+.article-bg.active{
+  opacity:1;
+}
+
+.article-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.42),
+    rgba(0,0,0,0.88)
+  );
+}
+
+.articles-content{
+  position:relative;
+  z-index:5;
+  height:100%;
+  display:flex;
+  align-items:center;
+  padding:0 90px;
+  /* Text is always visible, image changes behind it */
+}
+
+.article-text{
+  max-width:650px;
+}
+
+.article-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:72px;
+  line-height:1;
+  margin-bottom:24px;
+}
+
+.article-text p{
+  font-size:18px;
+  line-height:1.9;
+  color:#d0d0d0;
+}
+
+/* ─── SECTION 3: 3D GLB Watch ─── */
+.watch-3d-section{
+  height:100vh;
+  width:100%;
+  background:#080808;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.watch-3d-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at center, rgba(139,32,56,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.watch-3d-label{
+  position:absolute;
+  bottom:50px;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  z-index:10;
+}
+
+.watch-3d-label p.section-tag{
+  margin-bottom:8px;
+}
+
+.watch-3d-label h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+}
+
+#watchCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  position:relative;
+  z-index:5;
+}
+
+/* ─── FEATURED ─── */
+.featured{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  padding:120px 80px;
+  background:#050505;
+}
+
+.featured h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:62px;
+  line-height:1;
+  margin-bottom:25px;
+}
+
+.featured p{
+  line-height:1.9;
+  color:#c5c5c5;
+}
+
+.right{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.card{
+  padding:45px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.045);
+  backdrop-filter:blur(14px);
+}
+
+.card h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+/* ─── BANNER ─── */
+.banner{
+  height:70vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:url("images/banner.jpg") center/cover no-repeat;
+}
+
+.banner::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.58),
+    rgba(0,0,0,0.86)
+  );
+}
+
+.banner-content{
+  position:relative;
+  z-index:2;
+}
+
+.banner h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:72px;
+  margin-bottom:18px;
+}
+
+/* ─── GRID ─── */
+.grid-section{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+  padding:100px 80px;
+  background:#050505;
+}
+
+.grid-card{
+  padding:50px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.04);
+}
+
+.grid-card h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.grid-card p{
+  line-height:1.8;
+  color:#bdbdbd;
+}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:70px 60px;
+  background:#020202;
+  text-align:center;
+  color:#9a9a9a;
+}
+
+.footer-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+  letter-spacing:5px;
+  margin-bottom:15px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1000px){
+  .navbar{ padding:14px 28px; }
+  nav{ display:none; }
+
+  .hero h1{ font-size:52px; }
+  .desc{ font-size:16px; }
+
+  .articles-content{ padding:0 30px; }
+  .article-text h2{ font-size:48px; }
+
+  .featured,
+  .grid-section{ grid-template-columns:1fr; padding:80px 30px; }
+
+  .banner h2{ font-size:48px; }
+
+  .watch-3d-label h2{ font-size:30px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">HAKS & CO</div>
+  <nav>
+    <a href="#">Collections</a>
+    <a href="#">Craftsmanship</a>
+    <a href="#">Legacy</a>
+    <a href="#">Boutiques</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<!-- ─── SECTION 1: HERO (centered text, no 3D) ─── -->
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="watch.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="hero-content">
+    <p class="subtitle">Prestige Beyond Time</p>
+    <h1>Luxury Watches Reimagined</h1>
+    <p class="desc">
+      Precision engineered masterpieces crafted for collectors,
+      leaders, and visionaries.
+    </p>
+    <button>Discover Collection</button>
+  </div>
+</section>
+
+<!-- ─── SECTION 2: Scroll — background changes P1→P2→P3, text stays ─── -->
+<section class="articles-scroll">
+  <div class="articles-sticky">
+
+    <!-- Three background images — JS swaps .active on scroll -->
+    <div class="article-bg active" style="background-image:url('images/p1.png');"></div>
+    <div class="article-bg"        style="background-image:url('images/p2.png');"></div>
+    <div class="article-bg"        style="background-image:url('images/p3.png');"></div>
+
+    <!-- Text is FIXED inside sticky container — never moves -->
+    <div class="articles-content">
+      <div class="article-text">
+        <p class="section-tag">Royal Engineering</p>
+        <h2>Crafted Beyond Time</h2>
+        <p>
+          Every HAKS & CO timepiece reflects elite craftsmanship,
+          luxury detailing, and timeless mechanical precision.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── SECTION 3: 3D GLB Watch viewer ─── -->
+<section class="watch-3d-section">
+  <canvas id="watchCanvas"></canvas>
+
+  <div class="watch-3d-label">
+    <p class="section-tag">Interactive Preview</p>
+    <h2>The Masterpiece Up Close</h2>
+  </div>
+</section>
+
+<!-- ─── SECTION 4: Featured ─── -->
+<section class="featured">
+  <div class="left">
+    <p class="section-tag">Signature Collection</p>
+    <h2>Timeless Maroon Elegance</h2>
+    <p>
+      Inspired by heritage luxury watch houses with a bold contemporary
+      presence. Designed to feel powerful, elite, and unforgettable.
+    </p>
+  </div>
+
+  <div class="right">
+    <div class="card">
+      <h3>Imperial Chronograph</h3>
+      <p>Swiss Automatic Movement</p>
+    </div>
+    <div class="card">
+      <h3>Royal Heritage</h3>
+      <p>Limited Collector Edition</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BANNER ─── -->
+<section class="banner">
+  <div class="banner-content">
+    <h2>Crafted For The Extraordinary</h2>
+    <p>A statement of success, sophistication, and timeless ambition.</p>
+  </div>
+</section>
+
+<!-- ─── GRID ─── -->
+<section class="grid-section">
+  <div class="grid-card">
+    <h3>Precision</h3>
+    <p>Swiss-grade excellence refined to perfection.</p>
+  </div>
+  <div class="grid-card">
+    <h3>Luxury</h3>
+    <p>Premium finishes with deep maroon sophistication.</p>
+  </div>
+  <div class="grid-card">
+    <h3>Heritage</h3>
+    <p>Inspired by iconic watchmaking traditions.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">HAKS & CO</div>
+  <p>Luxury Watch House © 2026</p>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
+import { GLTFLoader }  from "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js";
+
+/* ─── Section 2 scroll image switcher ─── */
+const scrollSection = document.querySelector(".articles-scroll");
+const bgImages      = document.querySelectorAll(".article-bg");
+
+function updateScrollImage(){
+  const sectionTop    = scrollSection.offsetTop;
+  const sectionHeight = scrollSection.offsetHeight;
+  const scrollY       = window.scrollY || window.pageYOffset;
+  const winH          = window.innerHeight;
+
+  // How far into the sticky scroll range we are
+  const scrolled    = scrollY - sectionTop;
+  const totalScroll = sectionHeight - winH;
+
+  // Clamp progress 0→1
+  let progress = scrolled / totalScroll;
+  progress = Math.max(0, Math.min(1, progress));
+
+  // Split 0–1 into 3 equal bands → image index
+  let idx = Math.floor(progress * bgImages.length);
+  if(idx >= bgImages.length) idx = bgImages.length - 1;
+
+  bgImages.forEach(img => img.classList.remove("active"));
+  bgImages[idx].classList.add("active");
+}
+
+window.addEventListener("scroll", updateScrollImage, { passive:true });
+window.addEventListener("load",   updateScrollImage);
+updateScrollImage();
+
+
+/* ─── Section 3: GLB watch viewer ─── */
+const canvas   = document.getElementById("watchCanvas");
+const section3 = canvas.parentElement;
+
+const scene    = new THREE.Scene();
+const camera   = new THREE.PerspectiveCamera(35, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+camera.position.set(0, 0, 7);
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffffff, 1.8));
+
+const key = new THREE.DirectionalLight(0xffffff, 3.5);
+key.position.set(5, 8, 6);
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xffd0d8, 1.5);
+fill.position.set(-6, 3, 4);
+scene.add(fill);
+
+const rim = new THREE.DirectionalLight(0x8b2038, 1.2);
+rim.position.set(0, -4, -5);
+scene.add(rim);
+
+// OrbitControls (auto-rotate, user can drag)
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping   = true;
+controls.dampingFactor   = 0.06;
+controls.autoRotate      = true;
+controls.autoRotateSpeed = 1.8;
+controls.enablePan       = false;
+controls.minDistance     = 3;
+controls.maxDistance     = 14;
+
+let watchObject = null;
+
+function fitGLB(object){
+  const box    = new THREE.Box3().setFromObject(object);
+  const size   = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+
+  object.position.sub(center);
+
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const scale  = 3.8 / maxDim;
+  object.scale.setScalar(scale);
+}
+
+// Fallback geometry if GLB fails
+function buildFallback(){
+  const g = new THREE.Group();
+
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(1.25, 0.18, 24, 100),
+    new THREE.MeshStandardMaterial({ color:0xd8d8d8, metalness:0.9, roughness:0.18 })
+  );
+  g.add(ring);
+
+  const dial = new THREE.Mesh(
+    new THREE.CircleGeometry(1.05, 64),
+    new THREE.MeshStandardMaterial({ color:0x111111, metalness:0.4, roughness:0.35 })
+  );
+  dial.position.z = 0.05;
+  g.add(dial);
+
+  const strap = new THREE.Mesh(
+    new THREE.BoxGeometry(0.65, 3.7, 0.18),
+    new THREE.MeshStandardMaterial({ color:0x1a1a1a, metalness:0.4, roughness:0.5 })
+  );
+  strap.position.z = -0.08;
+  g.add(strap);
+
+  watchObject = g;
+  scene.add(g);
+}
+
+// Load GLB — place your file at watch.glb (root) or adjust path below
+const loader = new GLTFLoader();
+loader.load(
+  "watch.glb",           // ← your GLB file path
+  (gltf) => {
+    watchObject = gltf.scene;
+
+    // Apply metallic material to every mesh
+    watchObject.traverse(child => {
+      if(child.isMesh){
+        child.material = new THREE.MeshStandardMaterial({
+          color:      0xd0d0d0,
+          metalness:  0.92,
+          roughness:  0.18,
+        });
+      }
+    });
+
+    fitGLB(watchObject);
+    scene.add(watchObject);
+    console.log("GLB loaded successfully.");
+  },
+  undefined,
+  (err) => {
+    console.warn("GLB failed to load, using fallback:", err);
+    buildFallback();
+  }
+);
+
+// Animation loop
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize
+function onResize(){
+  const w = section3.clientWidth;
+  const h = section3.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener("resize", onResize);
+onResize();
+</script>
+
+</body>
+</html>
